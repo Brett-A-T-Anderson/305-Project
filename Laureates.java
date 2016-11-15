@@ -7,19 +7,21 @@ package pkg305_project;
 
 import java.util.ArrayList;
 
+
 /**
  *
  * @author mark
  */
 public class Laureates {
     
-    private ArrayList<Laureate> winners;
+    private ArrayList<Laureate> winners = new ArrayList<>();
     
     public void addTo(String raw_in) {
         if(raw_in.contains("api.nobelprize.org/") || 
-           raw_in.contains("id,firstname,surname,born,died")) { return; }
+           raw_in.contains("id,firstname,surname,born,died")
+           || raw_in.isEmpty()) { return; }
         
-        
+        raw_in = reformat(raw_in);
         String[] raw = raw_in.split(",");
         raw = fillBlanks(raw);
         raw = clean(raw);
@@ -30,6 +32,29 @@ public class Laureates {
     }
     //id,firstname,surname,born,died,bornCountry,bornCountryCode,bornCity,diedCountry,diedCountryCode,diedCity,gender,year,
     //category,overallMotivation,share,motivation,name,city,country
+    private String reformat(String raw_in) {
+        char[] formatting = raw_in.toCharArray();
+        int length = formatting.length;
+        boolean flag = false;
+        String formatted = "";
+        for(int i = 0; i < length; i++) {
+            
+            
+            if((formatting[i] == '"') && (!flag)) { flag = true; continue;}
+            if((formatting[i] == '"') && (flag)) { flag = false; continue;}   
+            
+            if(flag && (formatting[i] == ',')) {
+                formatting[i] = ' ';
+            }
+            formatted = formatted + formatting[i];
+            
+            
+        }
+
+        return formatted;
+    }
+
+
     
     private String[] fillBlanks(String[] raw){
         String current;
@@ -71,10 +96,59 @@ public class Laureates {
                 death = death + "," + raw[i];
             }
         }
+        
+        assign(born, death, prize, misc);
+
+        
         System.out.println("Born: " + born.replaceFirst(",", ""));
         System.out.println("Death: " + death.replaceFirst(",", ""));
         System.out.println("Prize: " + prize.replaceFirst(",", ""));
         System.out.println("Misc: " + misc.replaceFirst(",", ""));
-        System.out.println();        
+        System.out.println(); 
+       
+        
+       
     }
+    private void assign(String born, String death, String prize, String misc) {
+        Laureate Winner = new Laureate();
+        birthData(Winner, born);
+        deathData(Winner, death);
+        prizeData(Winner, prize);
+        miscData(Winner, misc);
+        winners.add(Winner);         
+    }
+  
+    private void birthData(Laureate Winner, String data) {
+        String[] process = data.split(",");
+        
+        Winner.addBirth(process[0], process[1],process[2],process[3]);
+    }
+    
+    private void deathData(Laureate Winner, String data) {
+        String[] process = data.split(",");
+        
+        Winner.addDeath(process[0], process[1],process[2],process[3]);
+    }
+    
+    private void prizeData(Laureate Winner, String data) {
+        String[] process = data.split(",");
+        String replaceA, replaceB;
+        int length = process.length;
+        if(length == 7) {
+            replaceA = process[5];
+            replaceB = process[6];
+        }
+        else {
+            replaceA = "Not Available";
+            replaceB = "Not Available";
+        }
+        Winner.addPrize(process[0], process[1],process[2],process[3],process[4], replaceA, replaceB);
+    }
+    
+    private void miscData(Laureate Winner, String data) {
+        String[] process = data.split(",");
+        Winner.addMisc(process[0], process[1],process[2],process[1] + process[2], process[3]);
+    }
+    
+
 }
