@@ -1,7 +1,4 @@
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by stapl on 11/15/2016.
@@ -39,27 +36,62 @@ public class Database {
         }
     }
     public ArrayList<Laureate> runQuery(Query search){
-        ArrayList<Laureate> temp = null;
         ArrayList<Integer> fName = null;
         ArrayList<Integer> lName = null;
-        ArrayList<Integer> year = null;
+        ArrayList<Integer> year = new ArrayList<Integer>();
         ArrayList<Integer> cat = null;
         ArrayList<Integer> count = null;
         ArrayList<Integer> gen = null;
+        Set<Integer> all = new HashSet<Integer>();
+        ArrayList<Laureate> temp = new ArrayList<Laureate>();
         if (!search.getFirstName().matches("")){
             fName = firstName.get(search.getFirstName());
         }
         if (!search.getLastName().matches("")){
-            lName = lastName.get(search.getFirstName());
+            lName = lastName.get(search.getLastName());
+            all.addAll(lName);
         }
         if (!search.getCategory().matches("")){
             cat = category.get(search.getCategory());
+            all.addAll(cat);
         }
         if (!search.getCountry().matches("")){
             count = country.get(search.getCountry());
+            all.addAll(count);
         }
         if (!search.getGender().matches("")){
             gen = gender.get(search.getGender());
+            all.addAll(gen);
+        }
+        if (search.getStartYear() != null) {
+            for (Integer i = search.getStartYear(); i < (search.getStartYear() + search.getLoops()); i++) {
+                if (years.containsKey(i)) {
+                    year.addAll(years.get(i));
+                }
+            }
+            all.addAll(year);
+        }
+        if (!search.getFirstName().matches("")){
+            all.retainAll(fName);
+        }
+        if (!search.getLastName().matches("")){
+            all.retainAll(lName);
+        }
+        if (!search.getCategory().matches("")){
+            all.retainAll(cat);
+        }
+        if (!search.getCountry().matches("")){
+           all.retainAll(count);
+        }
+        if (!search.getGender().matches("")){
+            all.retainAll(gen);
+        }
+        if (search.getStartYear() != null){
+            all.retainAll(year);
+        }
+        Integer[] iterator = all.toArray(new Integer[0]);
+        for (int i = 0; i < iterator.length; i++){
+            temp.add(id.get(iterator[i]));
         }
         return temp;
     }

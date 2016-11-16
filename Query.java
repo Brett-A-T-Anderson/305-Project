@@ -35,7 +35,7 @@ public class Query {
         this.gender = gender;
         this.country = country;
         if (this.startYear != null && this.endYear != null){
-            this.loops = this.startYear - this.endYear;
+            this.loops = this.endYear - this.startYear;
         }
         else{
             loops = 1;
