@@ -10,18 +10,16 @@ package pkg305_project;
  * @author mark
  */
 public class MiscData {
-    private String id;
-    private String firstname;
-    private String surname;
-    private String name;
-    private String gender;
+    private final String id;
+    private final String firstname;
+    private final String surname;
+    private final String gender;
     
     MiscData(String id, String firstname, String surname, 
-                String name, String gender) {
+                 String gender) {
         this.id = id;
         this.firstname = firstname;
         this.surname = surname;       
-        this.name = name;
         this.gender = gender;
     }
     
@@ -30,8 +28,6 @@ public class MiscData {
     public String getFName() { return firstname; }
     
     public String getLName() { return surname; }
-    
-    public String getName() { return name; }
     
     public String getGender() { return gender; }
 }

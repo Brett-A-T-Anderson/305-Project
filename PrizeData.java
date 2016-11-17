@@ -10,22 +10,24 @@ package pkg305_project;
  * @author mark
  */
 public class PrizeData {
-    private String year;
-    private String category;
-    private String overallMotivation;
-    private String share;
-    private String motivation;
-    private String city;
-    private String country;
+    private final String year;
+    private final String category;
+    private final String overallMotivation;
+    private final String share;
+    private final String motivation;
+    private final String uniName;
+    private final String city;
+    private final String country;
     
     PrizeData(String year, String category, String overallMotivation,
-            String share, String motivation, String city, String country) {
+            String share, String motivation, String uniName,String city, String country) {
         
         this.year = year;
         this.category = category;
         this.overallMotivation = overallMotivation;
         this.share = share;
         this.motivation = motivation;
+        this.uniName = uniName;
         this.city = city;
         this.country = country;
     }
@@ -39,6 +41,8 @@ public class PrizeData {
     public String getShare() { return share; }
     
     public String getMotivation() { return motivation; }
+    
+    public String getName() { return uniName; }
     
     public String getPCity() { return city; }
     

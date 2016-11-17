@@ -4,12 +4,7 @@
  * and open the template in the editor.
  */
 package pkg305_project;
-//id,firstname,surname,born,died,bornCountry,bornCountryCode,bornCity,diedCountry,diedCountryCode,diedCity,gender,year,
-//600,Henri,Bergson,1859-10-18,1941-01-04,France,FR,Paris,France,FR,Paris,male,1927,
 
-
-//category,overallMotivation,share,motivation,name,city,country
-//literature,               ,1,"""in recognition of his rich and vitalizing ideas and the brilliant skill with which they have been presented""",  ,  ,
 public class Laureate {
     
     public BirthData born;
@@ -31,14 +26,14 @@ public class Laureate {
     }
     
     public void addPrize(String year, String category, String overallMotivation,
-            String share, String motivation, String city, String country) {
+            String share, String motivation, String uniName, String city, String country) {
         this.prize = new PrizeData(year,  category,  overallMotivation,
-             share,  motivation,  city, country);
+             share,  motivation,  uniName, city, country);
     }
     
     public void addMisc(String id, String firstname, String surname, 
-                String name, String gender) {
-        this.misc = new MiscData(id,  firstname, surname, name, gender);   
+                 String gender) {
+        this.misc = new MiscData(id,  firstname, surname, gender);   
     }
 
 }
