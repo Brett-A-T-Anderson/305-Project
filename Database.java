@@ -43,27 +43,62 @@ public class Database {
         ArrayList<Integer> count = null;
         ArrayList<Integer> gen = null;
         Set<Integer> all = new HashSet<Integer>();
+        ArrayList<Laureate> empty = new ArrayList<Laureate>();
         ArrayList<Laureate> temp = new ArrayList<Laureate>();
+        boolean used = false;
         if (!search.getFirstName().matches("")){
-            fName = firstName.get(search.getFirstName());
+            fName = nameSearch(search.getFirstName());
+            if(fName != null) {
+                used = true;
+                all.addAll(fName);
+            }
+            else{
+                return empty;
+            }
         }
         if (!search.getLastName().matches("")){
+
             lName = lastName.get(search.getLastName());
-            all.addAll(lName);
+            if (lName != null) {
+                used = true;
+                all.addAll(lName);
+            }
+            else{
+                return empty;
+            }
         }
         if (!search.getCategory().matches("")){
             cat = category.get(search.getCategory());
-            all.addAll(cat);
+            if(cat != null) {
+                used = true;
+                all.addAll(cat);
+            }
+            else{
+                return empty;
+            }
         }
         if (!search.getCountry().matches("")){
             count = country.get(search.getCountry());
-            all.addAll(count);
+            if (count != null) {
+                used = true;
+                all.addAll(count);
+            }
+            else{
+                return empty;
+            }
         }
         if (!search.getGender().matches("")){
             gen = gender.get(search.getGender());
-            all.addAll(gen);
+            if (gen != null) {
+                used = true;
+                all.addAll(gen);
+            }
+            else{
+                return empty;
+            }
         }
         if (search.getStartYear() != null) {
+            used = true;
             for (Integer i = search.getStartYear(); i < (search.getStartYear() + search.getLoops()); i++) {
                 if (years.containsKey(i)) {
                     year.addAll(years.get(i));
@@ -71,23 +106,27 @@ public class Database {
             }
             all.addAll(year);
         }
-        if (!search.getFirstName().matches("")){
-            all.retainAll(fName);
+        if (!search.getFirstName().matches("") && fName != null){
+                all.retainAll(fName);
         }
-        if (!search.getLastName().matches("")){
+        if (!search.getLastName().matches("") && lName != null){
             all.retainAll(lName);
         }
-        if (!search.getCategory().matches("")){
+        if (!search.getCategory().matches("") && cat != null){
             all.retainAll(cat);
         }
-        if (!search.getCountry().matches("")){
+        if (!search.getCountry().matches("") && count != null){
            all.retainAll(count);
         }
-        if (!search.getGender().matches("")){
+        if (!search.getGender().matches("") && gen != null){
             all.retainAll(gen);
         }
-        if (search.getStartYear() != null){
+        if (search.getStartYear() != null && year != null){
             all.retainAll(year);
+        }
+        if (!used){
+            Integer[] total = firstName.entrySet().toArray(new Integer[0]);
+            //all  = new ArrayList<Laureate>(Arrays.asList(total));
         }
         Integer[] iterator = all.toArray(new Integer[0]);
         for (int i = 0; i < iterator.length; i++){
@@ -97,12 +136,18 @@ public class Database {
     }
     public void addSingleLaureate(Laureate laur){
         Integer id = laur.getID();
-        this.addFirstName(laur.getFirstName(),id);
-        this.addLastName(laur.getLastName(), id);
+        String fName[] = laur.getFirstName().split(" ");
+        if (fName[0].matches("[A-Z]\\.") || fName[0].matches("sir")){
+            this.addFirstName(fName[1].toLowerCase(), id);
+        }
+        else {
+            this.addFirstName(fName[0].toLowerCase(), id);
+        }
+        this.addLastName(laur.getLastName().toLowerCase(), id);
         this.addToYear(laur.getYear(), id);
-        this.addToCategory(laur.getCategory(), id);
-        this.addCountry(laur.getCountry(), id);
-        this.addGender(laur.getGender(), id);
+        this.addToCategory(laur.getCategory().toLowerCase(), id);
+        this.addCountry(laur.getCountry().toLowerCase(), id);
+        this.addGender(laur.getGender().toLowerCase(), id);
         this.addID(id, laur);
     }
 
@@ -114,16 +159,16 @@ public class Database {
 
     public void addFirstName(String name, Integer id){
         if (!firstName.containsKey(name)){
-            firstName.put(name, new ArrayList<Integer>());
+            firstName.put(name.toLowerCase(), new ArrayList<Integer>());
         }
-        firstName.get(name).add(id);
+        firstName.get(name.toLowerCase()).add(id);
     }
 
     public void addLastName(String name, Integer id){
         if (!lastName.containsKey(name)){
-            lastName.put(name, new ArrayList<Integer>());
+            lastName.put(name.toLowerCase(), new ArrayList<Integer>());
         }
-        lastName.get(name).add(id);
+        lastName.get(name.toLowerCase()).add(id);
     }
 
     public void addToYear(Integer year, Integer id){
@@ -157,5 +202,14 @@ public class Database {
     public void addID(Integer idVal, Laureate laur){
         id.put(idVal, laur);
     }
-
+    public ArrayList<Integer> nameSearch(String name){
+        ArrayList<Integer> temp = new ArrayList<Integer>();
+        String[] names = firstName.keySet().toArray(new String[0]);
+        for (int i = 0; i < names.length; i++){
+            if (names[i].matches(".*" + name + ".*")){
+                temp.addAll(firstName.get(names[i]));
+            }
+        }
+        return temp;
+    }
 }

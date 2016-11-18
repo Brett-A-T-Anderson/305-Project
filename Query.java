@@ -20,13 +20,23 @@ public class Query {
         this.firstName = firstName;
         this.lastName = lastName;
         if (!startYear.matches("")) {
-            this.startYear = Integer.parseInt(startYear);
+            if (startYear.matches("[0-9]*")) {
+                this.startYear = Integer.parseInt(startYear);
+            }
+            else{
+                this.startYear = null;
+            }
         }
         else{
             this.startYear = null;
         }
         if (!endYear.matches("")) {
-            this.endYear = Integer.parseInt(endYear);
+            if (endYear.matches("[0-9]*")) {
+                this.endYear = Integer.parseInt(endYear);
+            }
+            else{
+                this.endYear = null;
+            }
         }
         else{
             this.endYear = null;
@@ -35,7 +45,7 @@ public class Query {
         this.gender = gender;
         this.country = country;
         if (this.startYear != null && this.endYear != null){
-            this.loops = this.endYear - this.startYear;
+            this.loops = this.endYear - this.startYear + 1;
         }
         else{
             loops = 1;
