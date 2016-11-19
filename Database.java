@@ -125,8 +125,10 @@ public class Database {
             all.retainAll(year);
         }
         if (!used){
-            Integer[] total = firstName.entrySet().toArray(new Integer[0]);
-            //all  = new ArrayList<Laureate>(Arrays.asList(total));
+            String[] total = firstName.keySet().toArray(new String[0]);
+            for (int i = 0; i < total.length; i++){
+                all.addAll(firstName.get(total[i]));
+            }
         }
         Integer[] iterator = all.toArray(new Integer[0]);
         for (int i = 0; i < iterator.length; i++){
