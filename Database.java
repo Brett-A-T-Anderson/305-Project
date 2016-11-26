@@ -47,7 +47,7 @@ public class Database {
         ArrayList<Laureate> temp = new ArrayList<Laureate>();
         boolean used = false;
         if (!search.getFirstName().matches("")){
-            fName = nameSearch(search.getFirstName());
+            fName = nameSearch(search.getFirstName(), firstName);
             if(fName != null) {
                 used = true;
                 all.addAll(fName);
@@ -58,7 +58,7 @@ public class Database {
         }
         if (!search.getLastName().matches("")){
 
-            lName = lastName.get(search.getLastName());
+            lName = nameSearch(search.getLastName(), lastName);
             if (lName != null) {
                 used = true;
                 all.addAll(lName);
@@ -204,12 +204,12 @@ public class Database {
     public void addID(Integer idVal, Laureate laur){
         id.put(idVal, laur);
     }
-    public ArrayList<Integer> nameSearch(String name){
+    public ArrayList<Integer> nameSearch(String name, Map<String, ArrayList<Integer>> mapIn){
         ArrayList<Integer> temp = new ArrayList<Integer>();
-        String[] names = firstName.keySet().toArray(new String[0]);
+        String[] names = mapIn.keySet().toArray(new String[0]);
         for (int i = 0; i < names.length; i++){
             if (names[i].matches(".*" + name + ".*")){
-                temp.addAll(firstName.get(names[i]));
+                temp.addAll(mapIn.get(names[i]));
             }
         }
         return temp;
