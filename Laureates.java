@@ -1,4 +1,3 @@
-import javax.xml.crypto.Data;
 import java.util.ArrayList;
 import java.net.*;
 import java.io.*;
@@ -42,12 +41,12 @@ public class Laureates {
             startTime = System.currentTimeMillis();
             Query test = new Query(firstname.toLowerCase(), lastname.toLowerCase(), startyear.toLowerCase(), endyear.toLowerCase(), cat.toLowerCase(), gender.toLowerCase(), country.toLowerCase());
             System.out.println("Running Query");
-            data.runQuery(test);
             ArrayList<Laureate> max = data.runQuery(test);
             for (int i = 0; i < max.size(); i++) {
-                System.out.println(max.get(i).getFirstName() + " " + max.get(i).getLastName() + " " + max.get(i).getYear() + " " + max.get(i).getCategory() + " " + max.get(i).getCountry());
+                System.out.println(max.get(i).getFirstName() + " " + max.get(i).getLastName() + " " + max.get(i).getMotivation() + " " + max.get(i).getCategory() + " " + max.get(i).getCountry());
             }
             doneTime = System.currentTimeMillis();
+            System.out.println(doneTime - startTime);
         }
     }
 
