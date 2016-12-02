@@ -22,12 +22,18 @@ public class UndoRedo {
     }
 
     public Query grabUndo(){
+        if (Undo.size() == 0){
+            throw new IllegalStateException();
+        }
         Query temp = Undo.get(0);
         Undo.remove(0);
         Redo.add(temp);
         return temp;
     }
     public Query grabRedo(){
+        if (Redo.size() == 0){
+            throw new IllegalStateException();
+        }
         Query temp = Redo.get(0);
         Redo.remove(0);
         return temp;
