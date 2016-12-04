@@ -95,4 +95,5 @@ public class Laureate {
         }
     }
     public String getBirth(){return born.getBorn();}
+    public String getDeath(){return death.getDeath();}
 }
