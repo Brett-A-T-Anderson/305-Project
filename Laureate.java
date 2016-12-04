@@ -94,4 +94,5 @@ public class Laureate {
             return 0;
         }
     }
+    public String getBirth(){return born.getBorn();}
 }
