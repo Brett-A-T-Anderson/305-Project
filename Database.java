@@ -6,7 +6,7 @@ import java.util.*;
 public class Database {
     private Map<String, ArrayList<Integer>> firstName;
     private Map<String, ArrayList<Integer>> lastName;
-    private Map<Integer, ArrayList<Integer>> years;
+    private Map<Integer, ArrayList<Integer>> wonYears;
     private Map<Integer, ArrayList<Integer>> birthYear;
     private Map<Integer, ArrayList<Integer>> deathYear;
     private Map<String, ArrayList<Integer>> category;
@@ -20,7 +20,7 @@ public class Database {
     public Database(){
         firstName = new HashMap<String, ArrayList<Integer>>();
         lastName = new HashMap<String, ArrayList<Integer>>();
-        years = new HashMap<Integer, ArrayList<Integer>>();
+        wonYears = new HashMap<Integer, ArrayList<Integer>>();
         category = new HashMap<String, ArrayList<Integer>>();
         country = new HashMap<String, ArrayList<Integer>>();
         gender =  new HashMap<String, ArrayList<Integer>>();
@@ -35,7 +35,7 @@ public class Database {
     public Database(ArrayList<Laureate> laurs){
         firstName = new HashMap<String, ArrayList<Integer>>();
         lastName = new HashMap<String, ArrayList<Integer>>();
-        years = new HashMap<Integer, ArrayList<Integer>>();
+        wonYears = new HashMap<Integer, ArrayList<Integer>>();
         category = new HashMap<String, ArrayList<Integer>>();
         country = new HashMap<String, ArrayList<Integer>>();
         gender =  new HashMap<String, ArrayList<Integer>>();
@@ -53,9 +53,9 @@ public class Database {
     public List<Laureate> runQuery(Query search){
         List<Integer> fName = null;
         List<Integer> lName = null;
-        List<Integer> year = new ArrayList<Integer>();
-        List<Integer> dYear = null;
-        List<Integer> bYear = null;
+        List<Integer> yearsWon = new ArrayList<Integer>();
+        List<Integer> yearsDeath = null;
+        List<Integer> yearsBorn = null;
         List<Integer> bCity = null;
         List<Integer> dCity = null;
         List<Integer> dCountry = null;
@@ -86,26 +86,6 @@ public class Database {
                 return empty;
             }
         }
-        if (search.getBirthYear() != null){
-            bYear = birthYear.get(search.getBirthYear());
-            if(bYear != null) {
-                used = true;
-                all.addAll(bYear);
-            }
-            else{
-                return empty;
-            }
-        }
-        if (search.getDeathYear() != null){
-            dYear = deathYear.get(search.getDeathYear());
-            if(dYear != null) {
-                used = true;
-                all.addAll(dYear);
-            }
-            else{
-                return empty;
-            }
-        }
         if (!search.getCategory().matches("")){
             cat = category.get(search.getCategory());
             if(cat != null) {
@@ -116,8 +96,8 @@ public class Database {
                 return empty;
             }
         }
-        if (!search.getDeatbCity().matches("")){
-            dCity = nameSearch(search.getDeatbCity(), deathCity);
+        if (!search.getDeathCity().matches("")){
+            dCity = nameSearch(search.getDeathCity(), deathCity);
             if (dCity != null){
                 used = true;
                 all.addAll(dCity);
@@ -168,12 +148,18 @@ public class Database {
         }
         if (search.getStartYear() != null) {
             used = true;
-            for (Integer i = search.getStartYear(); i < (search.getStartYear() + search.getLoops()); i++) {
-                if (years.containsKey(i)) {
-                    year.addAll(years.get(i));
-                }
-            }
-            all.addAll(year);
+            yearsWon = yearSearch(wonYears, search.getStartYear(), search.getLoops());
+            all.addAll(yearsWon);
+        }
+        if (search.getDeathYear() != null) {
+            used = true;
+            yearsDeath = yearSearch(deathYear, search.getDeathYear(), search.getDeathLoops());
+            all.addAll(yearsDeath);
+        }
+        if (search.getBirthYear() != null) {
+            used = true;
+            yearsBorn = yearSearch(birthYear, search.getBirthYear(), search.getBirthLoops());
+            all.addAll(yearsBorn);
         }
         if (!search.getFirstName().matches("") && fName != null){
                 all.retainAll(fName);
@@ -190,7 +176,7 @@ public class Database {
         if (!search.getCategory().matches("") && cat != null){
             all.retainAll(cat);
         }
-        if (!search.getDeatbCity().matches("") && dCity != null){
+        if (!search.getDeathCity().matches("") && dCity != null){
             all.retainAll(dCity);
         }
         if (!search.getCountry().matches("") && count != null){
@@ -199,14 +185,14 @@ public class Database {
         if (!search.getGender().matches("") && gen != null){
             all.retainAll(gen);
         }
-        if (search.getBirthYear() != null && year != null){
-            all.retainAll(bYear);
+        if (search.getBirthYear() != null && yearsBorn != null){
+            all.retainAll(yearsBorn);
         }
-        if (search.getDeathYear() != null && year != null){
-            all.retainAll(dYear);
+        if (search.getDeathYear() != null && yearsDeath != null){
+            all.retainAll(yearsDeath);
         }
-        if (search.getStartYear() != null && year != null){
-            all.retainAll(year);
+        if (search.getStartYear() != null && yearsWon != null){
+            all.retainAll(yearsWon);
         }
         if (!used){
             String[] total = firstName.keySet().toArray(new String[0]);
@@ -224,7 +210,7 @@ public class Database {
         Integer id = laur.getID();
         this.addField(firstName, laur.getFirstName().toLowerCase(), id);
         this.addField(lastName, laur.getLastName().toLowerCase(), id);
-        this.addIntField(years, laur.getYear(), id);
+        this.addIntField(wonYears, laur.getYear(), id);
         this.addField(category, laur.getCategory().toLowerCase(), id);
         this.addField(country, laur.getCountry().toLowerCase(), id);
         this.addField(gender, laur.getGender().toLowerCase(), id);
@@ -235,13 +221,11 @@ public class Database {
         this.addIntField(birthYear, laur.getBirthYear(), id);
         this.addID(id, laur);
     }
-
     public void addMultipleLaureates(ArrayList<Laureate> laurs){
         for (int i = 0; i < laurs.size(); i++){
             this.addSingleLaureate(laurs.get(i));
         }
     }
-
     public void addField(Map<String, ArrayList<Integer>> toAdd, String addName, Integer id){
         if (!toAdd.containsKey(addName)){
             toAdd.put(addName, new ArrayList<Integer>());
@@ -257,12 +241,21 @@ public class Database {
     public void addID(Integer idVal, Laureate laur){
         id.put(idVal, laur);
     }
-    public ArrayList<Integer> nameSearch(String name, Map<String, ArrayList<Integer>> mapIn){
-        ArrayList<Integer> temp = new ArrayList<Integer>();
+    public List<Integer> nameSearch(String name, Map<String, ArrayList<Integer>> mapIn){
+        List<Integer> temp = new ArrayList<Integer>();
         String[] names = mapIn.keySet().toArray(new String[0]);
         for (int i = 0; i < names.length; i++){
             if (names[i].matches(".*" + name + ".*")){
                 temp.addAll(mapIn.get(names[i]));
+            }
+        }
+        return temp;
+    }
+    public List<Integer> yearSearch(Map<Integer, ArrayList<Integer>> years, Integer startYear, Integer loops){
+        List<Integer> temp = new ArrayList<Integer>();
+        for (Integer i = startYear; i < (startYear + loops); i++) {
+            if (years.containsKey(i)) {
+                temp.addAll(years.get(i));
             }
         }
         return temp;

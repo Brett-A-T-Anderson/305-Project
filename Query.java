@@ -16,70 +16,91 @@ public class Query {
     private String country;
     private String deathCountry;
     private String city;
-    private String deatbCity;
-    private Integer deathYear;
-    private Integer birthYear;
+    private String deathCity;
+    private Integer deathYearStart;
+    private Integer birthYearStart;
+    private Integer deathYearEnd;
+    private Integer birthYearEnd;
     private Integer loops;
+    private Integer deathLoops;
+    private Integer birthLoops;
 
-    public Query(String firstName, String lastName, String startYear, String endYear, String category, String gender, String country, String deathCountry, String city, String deathCity, String deathYear, String birthYear){
+    public Query(String firstName, String lastName, String startYear, String endYear, String category, String gender, String country,
+                 String deathCountry, String city, String deathCity, String deathYearStart, String deathYearEnd, String birthYearStart, String birthYearEnd){
         this.firstName = firstName;
         this.lastName = lastName;
+
+        /* this section handles all the integer fields in the queury. They are taken in as strings so they have to
+        be converted to Integer objects so that they can be used for looping by the database.
+         */
         if (!startYear.matches("")) {
-            if (startYear.matches("[0-9]*")) {
-                this.startYear = Integer.parseInt(startYear);
-            }
-            else{
-                this.startYear = null;
-            }
+            this.startYear = toInteger(startYear);
         }
         else{
             this.startYear = null;
         }
         if (!endYear.matches("")) {
-            if (endYear.matches("[0-9]*")) {
-                this.endYear = Integer.parseInt(endYear);
-            }
-            else{
-                this.endYear = null;
-            }
+            this.endYear = toInteger(endYear);
         }
         else{
             this.endYear = null;
         }
-        if (!deathYear.matches("")){
-            if (deathYear.matches("[0-9]*")) {
-                this.deathYear = Integer.parseInt(deathYear);
-            }
-            else{
-                this.deathYear = null;
-            }
-        }
-        else{
-            this.deathYear = null;
-        }
-        if (!birthYear.matches("")){
-            if (birthYear.matches("[0-9]*")) {
-                this.birthYear = Integer.parseInt(birthYear);
-            }
-            else{
-                this.birthYear = null;
-            }
-        }
-        else{
-            this.birthYear = null;
-        }
-
-        this.deatbCity = deathCity;
-        this.deathCountry = deathCountry;
-        this.city = city;
-        this.category = category;
-        this.gender = gender;
-        this.country = country;
         if (this.startYear != null && this.endYear != null){
             this.loops = this.endYear - this.startYear + 1;
         }
         else{
             loops = 1;
+        }
+
+        if (!deathYearStart.matches("")){
+                this.deathYearStart = toInteger(deathYearStart);
+        }
+        else{
+            this.deathYearStart = null;
+        }
+        if(!deathYearEnd.matches("")){
+            this.deathYearEnd = toInteger(deathYearEnd);
+        }
+        else{
+            this.deathYearEnd = null;
+        }
+        if (this.deathYearStart != null && this.deathYearEnd != null){
+            this.deathLoops = this.deathYearEnd - this.deathYearStart + 1;
+        }
+        else{
+            deathLoops = 1;
+        }
+        if (!birthYearStart.matches("")){
+            this.birthYearStart = toInteger(birthYearStart);
+        }
+        else{
+            this.birthYearStart = null;
+        }
+        if (!birthYearEnd.matches("")){
+            this.birthYearEnd = toInteger(birthYearEnd);
+        }
+        else{
+            this.birthYearEnd = null;
+        }
+        if (this.birthYearStart != null && this.birthYearEnd != null){
+            this.birthLoops = this.birthYearEnd - this.birthYearStart + 1;
+        }
+        else{
+            birthLoops = 1;
+        }
+        this.deathCity = deathCity;
+        this.deathCountry = deathCountry;
+        this.city = city;
+        this.category = category;
+        this.gender = gender;
+        this.country = country;
+    }
+    private Integer toInteger(String num){
+        if (num.matches("[0-9]*")) {
+            return Integer.parseInt(num);
+        }
+        else{
+            return null;
         }
     }
     public String getFirstName(){
@@ -94,11 +115,11 @@ public class Query {
     public Integer getEndYear(){
         return endYear;
     }
-    public Integer getBirthYear(){ return birthYear;}
-    public Integer getDeathYear() { return deathYear; }
+    public Integer getBirthYear(){ return birthYearStart;}
+    public Integer getDeathYear() { return deathYearStart; }
     public String getDeathCountry() { return deathCountry; }
     public String getCity() { return city; }
-    public String getDeatbCity() { return deatbCity; }
+    public String getDeathCity() { return deathCity; }
     public String getCategory(){
         return category;
     }
@@ -111,4 +132,6 @@ public class Query {
     public Integer getLoops(){
         return loops;
     }
+    public Integer getDeathLoops(){return deathLoops;}
+    public Integer getBirthLoops(){return birthLoops;}
 }

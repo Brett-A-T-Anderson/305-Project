@@ -1,6 +1,7 @@
 import java.util.ArrayList;
 import java.net.*;
 import java.io.*;
+import java.util.List;
 import java.util.Scanner;
 
 /**
@@ -23,27 +24,42 @@ public class Laureates {
         long doneTime = System.currentTimeMillis();
         System.out.println(doneTime - startTime);
         while(true) {
-            System.out.println("First Name");
+            /*System.out.println("First Name");
             String firstname = sc.nextLine();
             System.out.println("Last Name");
-            String lastname = sc.nextLine();
+            String lastname = sc.nextLine();*/
             System.out.println("Start Year");
             String startyear = sc.nextLine();
             System.out.println("End Year");
             String endyear = sc.nextLine();
-            System.out.println("Category");
+           /* System.out.println("Category");
             String cat = sc.nextLine();
             System.out.println("Gender");
             String gender = sc.nextLine();
             System.out.println("Country");
             String country = sc.nextLine();
+            System.out.println("City");
+            String city = sc.nextLine();*/
+            System.out.println("Birth start year");
+            String birthYear = sc.nextLine();
+            System.out.println("Birth end year");
+            String birthEndYear = sc.nextLine();
+            System.out.println("Death year");
+            String deathYear = sc.nextLine();
+            System.out.println("Death start year");
+            String deathEndYear = sc.nextLine();
+            /*System.out.println("Death city");
+            String deathCity = sc.nextLine();
+            System.out.println("Death Country");
+            String deathCounty = sc.nextLine();*/
 
             startTime = System.currentTimeMillis();
-            Query test = new Query(firstname.toLowerCase(), lastname.toLowerCase(), startyear.toLowerCase(), endyear.toLowerCase(), cat.toLowerCase(), gender.toLowerCase(), country.toLowerCase());
-            System.out.println("Running Query");
-            ArrayList<Laureate> max = data.runQuery(test);
+            /*Query test = new Query(firstname.toLowerCase(), lastname.toLowerCase(), startyear.toLowerCase(), endyear.toLowerCase(), cat.toLowerCase(), gender.toLowerCase(), country.toLowerCase(), deathCounty.toLowerCase(),
+                    city.toLowerCase(), deathCity.toLowerCase(), deathYear.toLowerCase(), deathEndYear.toLowerCase(), birthYear.toLowerCase(), birthEndYear.toLowerCase());*/
+            Query test = new Query("", "", startyear.toLowerCase(), endyear.toLowerCase(), "", "", "", "", "", "", deathYear.toLowerCase(), deathEndYear.toLowerCase(), birthYear.toLowerCase(), birthEndYear.toLowerCase());
+            List<Laureate> max = data.runQuery(test);
             for (int i = 0; i < max.size(); i++) {
-                System.out.println(max.get(i).getFirstName() + " " + max.get(i).getLastName() + " " + max.get(i).getMotivation() + " " + max.get(i).getCategory() + " " + max.get(i).getCountry());
+                System.out.println(max.get(i).getFirstName() + " " + max.get(i).getLastName() + " " + max.get(i).getYear() + " " + max.get(i).getBirthYear() + " " + max.get(i).getDeathYear());
             }
             doneTime = System.currentTimeMillis();
             System.out.println(doneTime - startTime);
