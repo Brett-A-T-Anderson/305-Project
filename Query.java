@@ -14,9 +14,14 @@ public class Query {
     private String category;
     private String gender;
     private String country;
+    private String deathCountry;
+    private String city;
+    private String deatbCity;
+    private Integer deathYear;
+    private Integer birthYear;
     private Integer loops;
 
-    public Query(String firstName, String lastName, String startYear, String endYear, String category, String gender, String country){
+    public Query(String firstName, String lastName, String startYear, String endYear, String category, String gender, String country, String deathCountry, String city, String deathCity, String deathYear, String birthYear){
         this.firstName = firstName;
         this.lastName = lastName;
         if (!startYear.matches("")) {
@@ -41,6 +46,32 @@ public class Query {
         else{
             this.endYear = null;
         }
+        if (!deathYear.matches("")){
+            if (deathYear.matches("[0-9]*")) {
+                this.deathYear = Integer.parseInt(deathYear);
+            }
+            else{
+                this.deathYear = null;
+            }
+        }
+        else{
+            this.deathYear = null;
+        }
+        if (!birthYear.matches("")){
+            if (birthYear.matches("[0-9]*")) {
+                this.birthYear = Integer.parseInt(birthYear);
+            }
+            else{
+                this.birthYear = null;
+            }
+        }
+        else{
+            this.birthYear = null;
+        }
+
+        this.deatbCity = deathCity;
+        this.deathCountry = deathCountry;
+        this.city = city;
         this.category = category;
         this.gender = gender;
         this.country = country;
@@ -63,6 +94,11 @@ public class Query {
     public Integer getEndYear(){
         return endYear;
     }
+    public Integer getBirthYear(){ return birthYear;}
+    public Integer getDeathYear() { return deathYear; }
+    public String getDeathCountry() { return deathCountry; }
+    public String getCity() { return city; }
+    public String getDeatbCity() { return deatbCity; }
     public String getCategory(){
         return category;
     }

@@ -46,9 +46,8 @@ public class Laureate {
     }
     public Integer getYear(){
         String temp = prize.getYear();
-        Integer ret = 0;
         if(temp.matches("[0-9]*")){
-            return Integer.parseInt(prize.getYear());
+            return Integer.parseInt(temp);
         }
         else{
            return 0;
@@ -65,5 +64,34 @@ public class Laureate {
     }
     public String getMotivation(){
         return prize.getMotivation();
+    }
+    public String getDeathCity(){
+        return death.getDCity();
+    }
+    public String getCity(){
+        return born.getBCity();
+    }
+    public String getDeathCountry(){
+        return death.getDCountry();
+    }
+    public Integer getDeathYear(){
+        String temp = death.getDeath();
+        String[] tmp = temp.split("-");
+        if(tmp[0].matches("[0-9]*")){
+            return Integer.parseInt(tmp[0]);
+        }
+        else{
+            return 0;
+        }
+    }
+    public Integer getBirthYear(){
+        String temp = born.getBorn();
+        String[] tmp = temp.split("-");
+        if(tmp[0].matches("[0-9]*")){
+            return Integer.parseInt(tmp[0]);
+        }
+        else{
+            return 0;
+        }
     }
 }
