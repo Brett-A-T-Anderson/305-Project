@@ -42,7 +42,7 @@ public class LaureatePic {
 
         //build the URL to retrieve the picture
         url = buildURL(prize, year, clean);
-        System.out.println(url);
+        //System.out.println(url);
         //This will set the image for MOST Laureates
         setImage(url);
 
@@ -53,7 +53,7 @@ public class LaureatePic {
             url = buildURL(prize, year, clean);
             //If they are duplicates with different names
             setImage(url);
-            System.out.println(url);
+            //System.out.println(url);
 
         }
 
@@ -105,6 +105,9 @@ public class LaureatePic {
      * Some of the pictures use URL protocol http and some use https, so this
      * will check to see which protocol it uses, and fetches the url accordingly
      *
+     * Code for this pulled from:
+     * https://www.mkyong.com/java/java-httpurlconnection-follow-redirect-example/
+     * 
      * @param url - String of the url,
      * @return url with the proper protocol
      */
@@ -115,11 +118,11 @@ public class LaureatePic {
             HttpURLConnection conn = (HttpURLConnection) obj.openConnection();
             int status = conn.getResponseCode();
 
-            if (status == HttpURLConnection.HTTP_MOVED_PERM) {
-                url = "http://www.nobelprize.org" + obj.getPath();
-                System.out.println("New URL:" + url);
-
-            }
+            if (status == HttpURLConnection.HTTP_MOVED_PERM) url = "http://www.nobelprize.org" + obj.getPath();
+                       
+            //close the connection
+            conn.disconnect();
+            
         } catch (Exception ex) {
 
             System.out.println("Error " + ex);
@@ -291,13 +294,6 @@ public class LaureatePic {
 
     }
 
-    /**
-     * This will check for a title in the first name of the Laureate, and then
-     * it will remove them.
-     *
-     * @param name - name of the person
-     * @return stripped name
-     */
     /**
      * This method cleans the name of the Laureate following a different
      * algorithm, this will take the first initial of their first name, combine
