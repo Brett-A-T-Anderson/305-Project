@@ -4,7 +4,12 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created by stapl on 11/15/2016.
+ * Created by Jack Staples on 11/15/2016.
+ *
+ * This is the query class that is passed to the database class t
+ * return information from it. Each field corresponds to an input on our
+ * gui. Years are used to generate a loop field so the database can grab in a range.
+ * This is a command pattern object, its passed to a database and .executes()
  */
 public class Query {
     private String firstName;

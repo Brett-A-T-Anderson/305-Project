@@ -1,7 +1,10 @@
 import java.util.*;
 
 /**
- * Created by stapl on 11/15/2016.
+ * Created by Jack Staples on 11/15/2016.
+ *
+ * This is our database that will contain all the laureautes and
+ * create maps to search through them quickly.
  */
 public class Database {
     private Map<String, ArrayList<Integer>> firstName;
@@ -31,7 +34,7 @@ public class Database {
         deathCity =  new HashMap<String, ArrayList<Integer>>();
         id = new HashMap<Integer, Laureate>();
     }
-
+/* this constructor is not used, but you could create a database from an array of laureate objects if needed */
     public Database(ArrayList<Laureate> laurs){
         firstName = new HashMap<String, ArrayList<Integer>>();
         lastName = new HashMap<String, ArrayList<Integer>>();
@@ -50,6 +53,7 @@ public class Database {
             this.addSingleLaureate(laurs.get(i));
         }
     }
+    /* this is the search method, runs a query object */
     public List<Laureate> runQuery(Query search){
         List<Integer> fName = null;
         List<Integer> lName = null;
@@ -221,26 +225,31 @@ public class Database {
         this.addIntField(birthYear, laur.getBirthYear(), id);
         this.addID(id, laur);
     }
+    /* not used, but if you wanted to add multiple laureautes you can */
     public void addMultipleLaureates(ArrayList<Laureate> laurs){
         for (int i = 0; i < laurs.size(); i++){
             this.addSingleLaureate(laurs.get(i));
         }
     }
+    /* add a string field to the database */
     public void addField(Map<String, ArrayList<Integer>> toAdd, String addName, Integer id){
         if (!toAdd.containsKey(addName)){
             toAdd.put(addName, new ArrayList<Integer>());
         }
         toAdd.get(addName).add(id);
     }
+    /* add an integer field to the database */
     public void addIntField(Map<Integer, ArrayList<Integer>> toAdd, Integer addInt, Integer id){
         if (!toAdd.containsKey(addInt)){
             toAdd.put(addInt, new ArrayList<Integer>());
         }
         toAdd.get(addInt).add(id);
     }
+    /* add an ID to the ID Map */
     public void addID(Integer idVal, Laureate laur){
         id.put(idVal, laur);
     }
+    /* this is a n length search that uses a regex pattern to find matching laureates */
     public List<Integer> nameSearch(String name, Map<String, ArrayList<Integer>> mapIn){
         List<Integer> temp = new ArrayList<Integer>();
         String[] names = mapIn.keySet().toArray(new String[0]);
@@ -251,6 +260,7 @@ public class Database {
         }
         return temp;
     }
+    /* returns all the laureates in a range of years */
     public List<Integer> yearSearch(Map<Integer, ArrayList<Integer>> years, Integer startYear, Integer loops){
         List<Integer> temp = new ArrayList<Integer>();
         for (Integer i = startYear; i < (startYear + loops); i++) {
