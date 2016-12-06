@@ -20,6 +20,7 @@ public class Database {
     private Map<String, ArrayList<Integer>> deathCity;
     private Map<Integer, Laureate> id;
 
+    /* database constructor */
     public Database(){
         firstName = new HashMap<String, ArrayList<Integer>>();
         lastName = new HashMap<String, ArrayList<Integer>>();
@@ -70,6 +71,13 @@ public class Database {
         List<Laureate> empty = new ArrayList<Laureate>();
         List<Laureate> temp = new ArrayList<Laureate>();
         boolean used = false;
+
+        /* these if looks check if a field is set and then
+        fill the needed array with all the laureates that
+        match the information in the query. nameSearch is used for
+        a n length regex search, while a simple map check is used for
+        others as it is faster
+         */
         if (!search.getFirstName().matches("")){
             fName = nameSearch(search.getFirstName(), firstName);
             if(fName != null) {
@@ -165,6 +173,10 @@ public class Database {
             yearsBorn = yearSearch(birthYear, search.getBirthYear(), search.getBirthLoops());
             all.addAll(yearsBorn);
         }
+
+        /* these if statements see which arrays have been filled and then filter out all
+        the laureates who do not match ALL the search categories
+         */
         if (!search.getFirstName().matches("") && fName != null){
                 all.retainAll(fName);
         }
@@ -204,12 +216,14 @@ public class Database {
                 all.addAll(firstName.get(total[i]));
             }
         }
+        /* this runs through and adds the matched id's to an array of laureate objects */
         Integer[] iterator = all.toArray(new Integer[0]);
         for (int i = 0; i < iterator.length; i++){
             temp.add(id.get(iterator[i]));
         }
         return temp;
     }
+    /* inputs a single laureate into the database using the addField and addIntField methods */
     public void addSingleLaureate(Laureate laur){
         Integer id = laur.getID();
         this.addField(firstName, laur.getFirstName().toLowerCase(), id);
